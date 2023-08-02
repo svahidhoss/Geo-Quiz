@@ -10,9 +10,6 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-//    private lateinit var trueButton: Button
-//    private lateinit var falseButton: Button
-
     private val questionList = listOf(
         Question(R.string.question_australia, true),
         Question(R.string.question_oceans, true),
@@ -22,16 +19,12 @@ class MainActivity : AppCompatActivity() {
         Question(R.string.question_asia, true)
     )
 
-    var currentIndex = 0
+    private var currentIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-//        trueButton = findViewById(R.id.true_button)
-//        falseButton = findViewById(R.id.false_button)
 
         binding.trueButton.setOnClickListener { _: View ->
             checkAnswer(true)
