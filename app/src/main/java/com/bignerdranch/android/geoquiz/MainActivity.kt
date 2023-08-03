@@ -47,6 +47,10 @@ class MainActivity : AppCompatActivity() {
             nextQuestion()
         }
 
+        binding.prevButton.setOnClickListener {
+            prevQuestion()
+        }
+
         binding.questionTextView.setOnClickListener {
             nextQuestion()
         }
@@ -56,6 +60,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun nextQuestion() {
         currentIndex = (currentIndex + 1) % questionList.size
+        updateQuestion()
+    }
+
+    private fun prevQuestion() {
+        currentIndex = if (currentIndex - 1 > 0) currentIndex - 1
+        else questionList.size - 1
         updateQuestion()
     }
 
