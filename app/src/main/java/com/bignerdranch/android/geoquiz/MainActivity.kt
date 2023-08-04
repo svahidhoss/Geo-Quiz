@@ -31,15 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.trueButton.setOnClickListener { _: View ->
             checkAnswer(true)
-
-//            Snackbar.make(
-//                findViewById(android.R.id.content),
-//                R.string.correct_toast,
-//                Snackbar.LENGTH_LONG
-//            )
-//                .setAction("CLOSE") { }
-//                .setActionTextColor(resources.getColor(android.R.color.holo_red_light))
-//                .show()
         }
 
         binding.falseButton.setOnClickListener { _: View ->
@@ -110,6 +101,15 @@ class MainActivity : AppCompatActivity() {
         val messageResId = if (isAnswerCorrect) R.string.correct_toast else R.string.incorrect_toast
 
         Toast.makeText(this, messageResId, Toast.LENGTH_SHORT)
+            .show()
+
+        Snackbar.make(
+            findViewById(android.R.id.content),
+            messageResId,
+            Snackbar.LENGTH_LONG
+        )
+            .setAction("CLOSE") { }
+            .setActionTextColor(resources.getColor(android.R.color.holo_red_light))
             .show()
     }
 }
