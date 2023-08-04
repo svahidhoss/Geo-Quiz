@@ -15,17 +15,6 @@ class MainActivity : AppCompatActivity() {
 
     private val quizViewModel: QuizViewModel by viewModels()
 
-    private val questionList = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true)
-    )
-
-    private var currentIndex = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
@@ -84,25 +73,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun nextQuestion() {
-        currentIndex = (currentIndex + 1) % questionList.size
+        quizViewModel.moveToNext()
         updateQuestion()
     }
 
     private fun prevQuestion() {
-        currentIndex = if (currentIndex - 1 > 0) currentIndex - 1
-        else questionList.size - 1
+        quizViewModel.moveToPrev()
         updateQuestion()
     }
 
     private fun updateQuestion() {
-        binding.questionTextView.setText(questionList[currentIndex].textResId)
+        binding.questionTextView.setText(quizViewModel.currentQuestionText)
     }
 
     /**
      * Checks the answer given by the user and updates the view
      */
     private fun checkAnswer(userAnswer: Boolean) {
-        val isAnswerCorrect = userAnswer == questionList[currentIndex].answer
+        val isAnswerCorrect = userAnswer == quizViewModel.currentQuestionAnswer
 
         val messageResId = if (isAnswerCorrect) R.string.correct_toast else R.string.incorrect_toast
 
