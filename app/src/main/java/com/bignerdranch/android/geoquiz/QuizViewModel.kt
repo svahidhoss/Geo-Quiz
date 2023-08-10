@@ -32,6 +32,8 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         get() = questionList[currentIndex].textResId
 
     fun moveToNext() {
+        // Added for debugging purposes of catching an exception in the log
+//        Log.d(TAG, "Updating question text", Exception())
         currentIndex = (currentIndex + 1) % questionList.size
     }
 
@@ -41,11 +43,11 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     }
 
     init {
-        Log.d(TAG, "ViewModel instance created")
+//        Log.d(TAG, "ViewModel instance created")
     }
 
     override fun onCleared() {
         super.onCleared()
-        Log.d(TAG, "ViewModel instance about to be destroyed")
+//        Log.d(TAG, "ViewModel instance about to be destroyed")
     }
 }

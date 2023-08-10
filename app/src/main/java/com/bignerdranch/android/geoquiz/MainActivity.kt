@@ -10,6 +10,7 @@ import com.bignerdranch.android.geoquiz.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 
 private const val TAG = "MainActivity"
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
