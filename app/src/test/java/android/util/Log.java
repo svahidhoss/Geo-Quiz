@@ -1,5 +1,9 @@
 package android.util;
 
+/**
+ * Provided this class to avoid mocking the Android
+ * SDK's Log class.
+ */
 public class Log {
     public static int d(String tag, String msg) {
         System.out.println("DEBUG: " + tag + ": " + msg);
