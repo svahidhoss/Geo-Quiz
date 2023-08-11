@@ -37,4 +37,19 @@ class MainActivityTest {
         onView(withId(R.id.question_text_view))
             .check(matches(withText(R.string.question_oceans)))
     }
+
+    @Test
+    fun handleActivityRecreation() {
+        onView(withId(R.id.next_button)).perform(click())
+        scenario.recreate()
+        onView(withId(R.id.question_text_view))
+            .check(matches(withText(R.string.question_oceans)))
+    }
+
+    @Test
+    fun showsFirstQuestionAfterPrevButtonPress() {
+        onView(withId(R.id.prev_button)).perform(click())
+        onView(withId(R.id.question_text_view))
+            .check(matches(withText(R.string.question_asia)))
+    }
 }
