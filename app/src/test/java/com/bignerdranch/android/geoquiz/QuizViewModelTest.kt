@@ -1,7 +1,7 @@
 package com.bignerdranch.android.geoquiz
 
 import androidx.lifecycle.SavedStateHandle
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Test
 
 class QuizViewModelTest {
@@ -22,5 +22,22 @@ class QuizViewModelTest {
         quizViewModel.moveToNext()
         quizViewModel.moveToPrev()
         assertEquals(R.string.question_australia, quizViewModel.currentQuestionText)
+    }
+
+    @Test
+    fun hasCorrectAnswerToQuestion() {
+        var savedStateHandle = SavedStateHandle()
+        var quizViewModel = QuizViewModel(savedStateHandle)
+        assertTrue(quizViewModel.currentQuestionAnswer)
+
+        savedStateHandle = SavedStateHandle(mapOf(CURRENT_INDEX_KEY to 5))
+        quizViewModel = QuizViewModel(savedStateHandle)
+        assertTrue(quizViewModel.currentQuestionAnswer)
+        quizViewModel.moveToPrev()
+        assertTrue(quizViewModel.currentQuestionAnswer)
+        quizViewModel.moveToPrev()
+        assertFalse(quizViewModel.currentQuestionAnswer)
+        quizViewModel.moveToPrev()
+        assertFalse(quizViewModel.currentQuestionAnswer)
     }
 }
