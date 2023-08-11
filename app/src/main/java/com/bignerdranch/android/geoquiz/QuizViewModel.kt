@@ -38,7 +38,7 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     }
 
     fun moveToPrev() {
-        currentIndex = if (currentIndex - 1 > 0) currentIndex - 1
+        currentIndex = if (currentIndex - 1 >= 0) currentIndex - 1
         else questionList.size - 1
     }
 

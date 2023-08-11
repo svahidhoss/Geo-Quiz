@@ -19,5 +19,8 @@ class QuizViewModelTest {
         assertEquals(R.string.question_asia, quizViewModel.currentQuestionText)
         quizViewModel.moveToNext()
         assertEquals(R.string.question_australia, quizViewModel.currentQuestionText)
+        quizViewModel.moveToNext()
+        quizViewModel.moveToPrev()
+        assertEquals(R.string.question_australia, quizViewModel.currentQuestionText)
     }
 }
