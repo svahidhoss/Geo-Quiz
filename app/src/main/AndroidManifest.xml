@@ -13,9 +13,11 @@
         android:theme="@style/Theme.GeoQuiz"
         tools:targetApi="31">
         <activity
+            android:name=".CheatActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,5 +28,3 @@
     </application>
 
 </manifest>
-
-
