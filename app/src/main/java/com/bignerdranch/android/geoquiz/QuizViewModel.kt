@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 
 private const val TAG = "QuizViewModel"
 const val CURRENT_INDEX_KEY = "CURRENT_INDEX_KEY"
+const val IS_CHEATER_KEY = "IS_CHEATER_KEY"
 
 class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
@@ -30,6 +31,10 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 
     val currentQuestionText: Int
         get() = questionList[currentIndex].textResId
+
+    var isCheater: Boolean
+        get() = savedStateHandle[IS_CHEATER_KEY] ?: false
+        set(value) = savedStateHandle.set(IS_CHEATER_KEY, value)
 
     fun moveToNext() {
         // Added for debugging purposes of catching an exception in the log

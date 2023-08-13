@@ -1,5 +1,6 @@
 package com.bignerdranch.android.geoquiz
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +8,7 @@ import android.os.Bundle
 import com.bignerdranch.android.geoquiz.databinding.ActivityCheatBinding
 
 private const val EXTRA_ANSWER_IS_TRUE = "com.bignerdranch.android.geoquiz.answer_is_true"
+internal const val EXTRA_ANSWER_SHOWN = "com.bignerdranch.android.geoquiz.answer_shown"
 
 class CheatActivity : AppCompatActivity() {
 
@@ -26,7 +28,16 @@ class CheatActivity : AppCompatActivity() {
                 else -> R.string.false_button
             }
             binding.answerTextView.setText(textAnswerId)
+            setAnswerShownResult(true)
         }
+    }
+
+    private fun setAnswerShownResult(isAnswerShown: Boolean) {
+        val data = Intent().apply {
+            putExtra(EXTRA_ANSWER_SHOWN, isAnswerShown)
+        }
+        // let main activity know that the user has seen the answer
+        setResult(Activity.RESULT_OK, data)
     }
 
     companion object {
