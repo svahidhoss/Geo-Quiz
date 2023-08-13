@@ -23,8 +23,6 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         get() = savedStateHandle[CURRENT_INDEX_KEY] ?: 0
         set(value) = savedStateHandle.set(CURRENT_INDEX_KEY, value)
 
-    var hasAlreadyAnswered = false
-
     val currentQuestionAnswer: Boolean
         get() = questionList[currentIndex].answer
 
@@ -33,8 +31,16 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         get() = questionList[currentIndex].textResId
 
     var isCheater: Boolean
-        get() = savedStateHandle[IS_CHEATER_KEY] ?: false
-        set(value) = savedStateHandle.set(IS_CHEATER_KEY, value)
+        get() {
+            val isCheatedList: BooleanArray? = savedStateHandle[IS_CHEATER_KEY]
+            return isCheatedList?.get(currentIndex) ?: false
+        }
+        set(value) {
+            var isCheatedList: BooleanArray? = savedStateHandle[IS_CHEATER_KEY]
+            if (isCheatedList == null) isCheatedList = BooleanArray(questionList.size)
+            isCheatedList[currentIndex] = value
+            savedStateHandle[IS_CHEATER_KEY] = isCheatedList
+        }
 
     fun moveToNext() {
         // Added for debugging purposes of catching an exception in the log
