@@ -41,6 +41,9 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "Got a QuizViewModel: $quizViewModel")
 
+        binding.viewModel = quizViewModel
+        binding.lifecycleOwner = this
+
         binding.trueButton.setOnClickListener { _: View ->
             checkAnswer(true)
         }
@@ -71,8 +74,6 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             blurCheatButton()
         }
-
-        binding.androidVersionTextView.text = getString(R.string.api_level_msg, Build.VERSION.SDK_INT)
     }
 
     override fun onStart() {
@@ -141,8 +142,8 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     private fun blurCheatButton() {
         val effect = RenderEffect.createBlurEffect(
-            10.0f,
-            10.0f,
+            4.0f,
+            4.0f,
             Shader.TileMode.CLAMP
         )
         binding.cheatButton.setRenderEffect(effect)

@@ -1,6 +1,8 @@
 package com.bignerdranch.android.geoquiz
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
@@ -18,7 +20,6 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         Question(R.string.question_americas, true),
         Question(R.string.question_asia, true)
     )
-
     private var currentIndex: Int
         get() = savedStateHandle[CURRENT_INDEX_KEY] ?: 0
         set(value) = savedStateHandle.set(CURRENT_INDEX_KEY, value)
@@ -30,6 +31,12 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     val currentQuestionText: Int
         get() = questionList[currentIndex].textResId
 
+    private var numOfCheats: Int = 0
+
+    private val _isCheatButtonEnabled = MutableLiveData(true)
+    val isCheatButtonEnabled: LiveData<Boolean>
+        get() = _isCheatButtonEnabled
+
     var isCheater: Boolean
         get() {
             val isCheatedList: BooleanArray? = savedStateHandle[IS_CHEATER_KEY]
@@ -38,6 +45,10 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         set(value) {
             var isCheatedList: BooleanArray? = savedStateHandle[IS_CHEATER_KEY]
             if (isCheatedList == null) isCheatedList = BooleanArray(questionList.size)
+            if (!isCheatedList[currentIndex] && value) numOfCheats++
+            // Disable the button after 3 question cheats
+            if (numOfCheats >= 3) _isCheatButtonEnabled.value = false
+            Log.d(TAG, "numOfCheats is %d".format(numOfCheats))
             isCheatedList[currentIndex] = value
             savedStateHandle[IS_CHEATER_KEY] = isCheatedList
         }
