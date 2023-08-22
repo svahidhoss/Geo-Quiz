@@ -41,6 +41,7 @@ class MainActivityTest {
     @Test
     fun handleActivityRecreation() {
         onView(withId(R.id.next_button)).perform(click())
+        // To mimic recreation of activity (device rotation test)
         scenario.recreate()
         onView(withId(R.id.question_text_view))
             .check(matches(withText(R.string.question_oceans)))
