@@ -10,3 +10,5 @@ Key Features:
 - LiveData: Observed data changes and updated the UI accordingly.
 - User Feedback: Used Toast messages to provide instant feedback on answers.
 - Score Tracking: Tracked and displayed the user's score throughout the quiz.
+
+The app has been inspired by the Big Nerd Ranch book's first 8 chapters.
