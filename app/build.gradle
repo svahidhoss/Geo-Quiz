@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace 'com.bignerdranch.android.geoquiz'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.bignerdranch.android.geoquiz"
         minSdk 24
-        targetSdk 34
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
@@ -39,11 +39,11 @@ android {
 
 dependencies {
     // Jetpack
-    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.core:core-ktx:1.15.0'
     implementation 'androidx.appcompat:appcompat:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.3'
-    implementation 'androidx.activity:activity-ktx:1.9.0'
-    implementation "androidx.databinding:databinding-runtime:8.5.0"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
+    implementation 'androidx.activity:activity-ktx:1.10.1'
+    implementation "androidx.databinding:databinding-runtime:8.9.1"
 
     implementation 'com.google.android.material:material:1.12.0'
     testImplementation 'junit:junit:4.13.2'
