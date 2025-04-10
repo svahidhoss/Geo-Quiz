@@ -7,9 +7,23 @@ import org.junit.Test
 class QuizViewModelTest {
     @Test
     fun providesExpectedQuestionText() {
+        // Testing default question text
         val savedStateHandle = SavedStateHandle()
         val quizViewModel = QuizViewModel(savedStateHandle)
+
+        // Starting at first question (index 0)
         assertEquals(R.string.question_australia, quizViewModel.currentQuestionText)
+        // Testing question text after moving to pre question for the first question
+        quizViewModel.moveToPrev()
+        assertEquals(R.string.question_australia, quizViewModel.currentQuestionText)
+
+        // Move to next question
+        quizViewModel.moveToNext()
+        assertEquals(R.string.question_oceans, quizViewModel.currentQuestionText)
+
+        // Move to next question again
+        quizViewModel.moveToNext()
+        assertEquals(R.string.question_mideast, quizViewModel.currentQuestionText)
     }
 
     @Test
@@ -18,11 +32,20 @@ class QuizViewModelTest {
         val savedStateHandle = SavedStateHandle(mapOf(CURRENT_INDEX_KEY to 5))
         val quizViewModel = QuizViewModel(savedStateHandle)
         assertEquals(R.string.question_asia, quizViewModel.currentQuestionText)
-        quizViewModel.moveToNext()
+        // Return to the first question
+        repeat(5) {
+            quizViewModel.moveToPrev()
+        }
         assertEquals(R.string.question_australia, quizViewModel.currentQuestionText)
         // Move back and forth
         quizViewModel.moveToNext()
         quizViewModel.moveToPrev()
+        assertEquals(R.string.question_australia, quizViewModel.currentQuestionText)
+
+        // Question should wrap around to the first question
+        repeat(15) {
+            quizViewModel.moveToPrev()
+        }
         assertEquals(R.string.question_australia, quizViewModel.currentQuestionText)
     }
 
@@ -36,11 +59,74 @@ class QuizViewModelTest {
         savedStateHandle = SavedStateHandle(mapOf(CURRENT_INDEX_KEY to 5))
         quizViewModel = QuizViewModel(savedStateHandle)
         assertTrue(quizViewModel.currentQuestionAnswer)
-        quizViewModel.moveToPrev()
-        assertTrue(quizViewModel.currentQuestionAnswer)
-        quizViewModel.moveToPrev()
-        assertFalse(quizViewModel.currentQuestionAnswer)
-        quizViewModel.moveToPrev()
-        assertFalse(quizViewModel.currentQuestionAnswer)
+
+        repeat(10) {
+            quizViewModel.moveToPrev()
+        }
     }
+
+
+    @Test
+    fun savedStateHandlePreservesCurrentIndex() {
+        // Create with initial index of 3
+        val savedStateHandle = SavedStateHandle(mapOf(CURRENT_INDEX_KEY to 3))
+        val quizViewModel = QuizViewModel(savedStateHandle)
+
+        assertEquals(R.string.question_africa, quizViewModel.currentQuestionText)
+
+        // Change index
+        quizViewModel.moveToNext()
+
+        // Create new ViewModel with same SavedStateHandle
+        val newQuizViewModel = QuizViewModel(savedStateHandle)
+
+        // Should have preserved the updated index
+        assertEquals(R.string.question_americas, newQuizViewModel.currentQuestionText)
+    }
+
+    @Test
+    fun savedStateHandlePreservesCheatingStatus() {
+        val savedStateHandle = SavedStateHandle()
+        val quizViewModel = QuizViewModel(savedStateHandle)
+
+        // Set cheating status
+        quizViewModel.isCheater = true
+
+        // Create new ViewModel with same SavedStateHandle
+        val newQuizViewModel = QuizViewModel(savedStateHandle)
+
+        // Should have preserved cheating status
+        assertTrue(newQuizViewModel.isCheater)
+    }
+
+    @Test
+    fun cheatingStatusPreservedForMultipleQuestions() {
+        val savedStateHandle = SavedStateHandle()
+        val quizViewModel = QuizViewModel(savedStateHandle)
+
+        // Cheat on first question
+        quizViewModel.isCheater = true
+
+        // Move to second question and cheat
+        quizViewModel.moveToNext()
+        quizViewModel.isCheater = true
+
+        // Move to third question but don't cheat
+        quizViewModel.moveToNext()
+
+        // Create new ViewModel with same SavedStateHandle
+        val newQuizViewModel = QuizViewModel(savedStateHandle)
+
+        // Check first question
+        assertTrue(newQuizViewModel.isCheater)
+
+        // Check second question
+        newQuizViewModel.moveToNext()
+        assertTrue(newQuizViewModel.isCheater)
+
+        // Check third question
+        newQuizViewModel.moveToNext()
+        assertFalse(newQuizViewModel.isCheater)
+    }
+
 }

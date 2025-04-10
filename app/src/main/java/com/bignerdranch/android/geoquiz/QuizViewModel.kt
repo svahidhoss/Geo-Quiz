@@ -1,6 +1,7 @@
 package com.bignerdranch.android.geoquiz
 
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
@@ -10,16 +11,17 @@ private const val TAG = "QuizViewModel"
 const val CURRENT_INDEX_KEY = "CURRENT_INDEX_KEY"
 const val IS_CHEATER_KEY = "IS_CHEATER_KEY"
 
+private val questionList = listOf(
+    Question(R.string.question_australia, true),
+    Question(R.string.question_oceans, true),
+    Question(R.string.question_mideast, false),
+    Question(R.string.question_africa, false),
+    Question(R.string.question_americas, true),
+    Question(R.string.question_asia, true)
+)
+
 class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
 
-    private val questionList = listOf(
-        Question(R.string.question_australia, true),
-        Question(R.string.question_oceans, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_africa, false),
-        Question(R.string.question_americas, true),
-        Question(R.string.question_asia, true)
-    )
     private var currentIndex: Int
         get() = savedStateHandle[CURRENT_INDEX_KEY] ?: 0
         set(value) = savedStateHandle.set(CURRENT_INDEX_KEY, value)
@@ -27,7 +29,7 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     val currentQuestionAnswer: Boolean
         get() = questionList[currentIndex].answer
 
-
+    @get:StringRes
     val currentQuestionText: Int
         get() = questionList[currentIndex].textResId
 
@@ -56,12 +58,11 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     fun moveToNext() {
         // Added for debugging purposes of catching an exception in the log
         // Log.d(TAG, "Updating question text", Exception())
-        currentIndex = (currentIndex + 1) % questionList.size
+        if (currentIndex < questionList.size - 1) currentIndex++
     }
 
     fun moveToPrev() {
-        currentIndex = if (currentIndex - 1 >= 0) currentIndex - 1
-        else questionList.size - 1
+        if (currentIndex > 0) currentIndex -= 1
     }
 
     init {
