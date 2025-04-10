@@ -33,13 +33,11 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
     val currentQuestionText: Int
         get() = questionList[currentIndex].textResId
 
-    private var numOfCheats: Int = 0
-
     private val _isCheatButtonEnabled = MutableLiveData(true)
     val isCheatButtonEnabled: LiveData<Boolean>
         get() = _isCheatButtonEnabled
 
-    var isCheater: Boolean
+    var isCheatingCurrentQuestion: Boolean
         get() {
             val isCheatedList: BooleanArray? = savedStateHandle[IS_CHEATER_KEY]
             return isCheatedList?.get(currentIndex) ?: false
@@ -47,12 +45,24 @@ class QuizViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         set(value) {
             var isCheatedList: BooleanArray? = savedStateHandle[IS_CHEATER_KEY]
             if (isCheatedList == null) isCheatedList = BooleanArray(questionList.size)
-            if (!isCheatedList[currentIndex] && value) numOfCheats++
-            // Disable the button after 3 question cheats
-            if (numOfCheats >= 3) _isCheatButtonEnabled.value = false
-            Log.d(TAG, "numOfCheats is %d".format(numOfCheats))
+
+            var recountCheats = false
+            if (!isCheatedList[currentIndex] && value) recountCheats = true
+
+            // Set the value first
             isCheatedList[currentIndex] = value
+            // Save the updated array
             savedStateHandle[IS_CHEATER_KEY] = isCheatedList
+
+            // Only update cheat count if this is a new cheat
+            if (recountCheats) {
+                // Count the number of true values in the array
+                val cheatedCount = isCheatedList.count { it }
+
+                // Disable cheat button if limit reached
+                if (cheatedCount >= 3) _isCheatButtonEnabled.value = false
+                Log.d(TAG, "Number of cheats is $cheatedCount")
+            }
         }
 
     fun moveToNext() {

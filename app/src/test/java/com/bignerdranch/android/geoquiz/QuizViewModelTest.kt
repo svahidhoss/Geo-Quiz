@@ -90,13 +90,13 @@ class QuizViewModelTest {
         val quizViewModel = QuizViewModel(savedStateHandle)
 
         // Set cheating status
-        quizViewModel.isCheater = true
+        quizViewModel.isCheatingCurrentQuestion = true
 
         // Create new ViewModel with same SavedStateHandle
         val newQuizViewModel = QuizViewModel(savedStateHandle)
 
         // Should have preserved cheating status
-        assertTrue(newQuizViewModel.isCheater)
+        assertTrue(newQuizViewModel.isCheatingCurrentQuestion)
     }
 
     @Test
@@ -105,11 +105,11 @@ class QuizViewModelTest {
         val quizViewModel = QuizViewModel(savedStateHandle)
 
         // Cheat on first question
-        quizViewModel.isCheater = true
+        quizViewModel.isCheatingCurrentQuestion = true
 
         // Move to second question and cheat
         quizViewModel.moveToNext()
-        quizViewModel.isCheater = true
+        quizViewModel.isCheatingCurrentQuestion = true
 
         // Move to third question but don't cheat
         quizViewModel.moveToNext()
@@ -117,16 +117,15 @@ class QuizViewModelTest {
         // Create new ViewModel with same SavedStateHandle
         val newQuizViewModel = QuizViewModel(savedStateHandle)
 
-        // Check first question
-        assertTrue(newQuizViewModel.isCheater)
+        // Check third question
+        assertFalse(newQuizViewModel.isCheatingCurrentQuestion)
+        newQuizViewModel.moveToPrev()
 
         // Check second question
-        newQuizViewModel.moveToNext()
-        assertTrue(newQuizViewModel.isCheater)
+        assertTrue(newQuizViewModel.isCheatingCurrentQuestion)
+        newQuizViewModel.moveToPrev()
 
-        // Check third question
-        newQuizViewModel.moveToNext()
-        assertFalse(newQuizViewModel.isCheater)
+        // Check first question
+        assertTrue(newQuizViewModel.isCheatingCurrentQuestion)
     }
-
 }
